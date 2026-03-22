@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="IGI2-GetServerInfo.vcxproj" Id="736bde8f-ecb0-4607-aafd-bfa6140ccf2e" />
+</Solution>
