@@ -1,6 +1,5 @@
-﻿// 必须放在所有头文件之前！禁用废弃API警告
+// 必须放在所有头文件之前！禁用废弃API警告
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
-
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -98,17 +97,17 @@ string formatServerInfo(const unordered_map<string, string>& fields) {
     }
 
     // 拼接输出内容
-    string output = "\nServer Info:\n";
+    string output = "\n[IGI2 Server Info]:\n";
     output += "-------------------------------------------------\n";
     output += "Server Name: " + fields.at("hostname") + "\n";
-    output += "Server Map: " + fields.at("mapname") + "\n";
-    output += "Server Map Time: " + fields.at("timeleft") + "\n";
-    output += "Server Map Stats: " + mapstatClean + "\n";
+    output += "Current Map: " + fields.at("mapname") + "\n";
+    output += "Time Left: " + fields.at("timeleft") + "\n";
+    output += "Map Status: " + mapstatClean + "\n";
     output += "Players: " + fields.at("numplayers") + "/" + fields.at("maxplayers") + "\n";
-    output += "Server Uptime: " + uptimeStr + "\n";
-    output += "Server Password: " + passwordStr + "\n";
-    output += "Team 0 (IGI): Score = " + fields.at("score_t0") + "\n";
-    output += "Team 1 (CON): Score = " + fields.at("score_t1") + "\n";
+    output += "Uptime: " + uptimeStr + "\n";
+    output += "Password: " + passwordStr + "\n";
+    output += "IGI Score = " + fields.at("score_t0") + "\n";
+    output += "CON Score = " + fields.at("score_t1") + "\n";
     output += "-------------------------------------------------\n";
 
     // 玩家信息
@@ -116,7 +115,7 @@ string formatServerInfo(const unordered_map<string, string>& fields) {
         output += "Player Info: No players online\n";
     }
     else {
-        output += "Player Info: " + fields.at("numplayers") + " players online (details not provided)\n";
+        output += "Player Info: " + fields.at("numplayers") + " players online (no details)\n";
     }
     return output;
 }
@@ -205,7 +204,7 @@ string sendUdpStatusRequest(const string& serverIp, int serverPort, int timeout 
             this_thread::sleep_for(chrono::milliseconds(100)); // 发送间隔
         }
 
-        cout << "已向 " << serverIp << ":" << serverPort << " 发送状态请求（2次重试）" << endl;
+        cout << "Sent status request to " << serverIp << ":" << serverPort << " (2 retries)" << endl;
 
         // 8. 接收服务器响应
         char recvBuf[16384] = { 0 };
@@ -243,8 +242,7 @@ string sendUdpStatusRequest(const string& serverIp, int serverPort, int timeout 
         // 打印响应来源信息
         char fromIp[INET_ADDRSTRLEN] = { 0 };
         inet_ntop(AF_INET, &fromAddr.sin_addr, fromIp, sizeof(fromIp));
-        cout << "已收到来自 " << fromIp << ":" << ntohs(fromAddr.sin_port)
-            << " 的响应，长度：" << recvLen << " 字节" << endl;
+        cout << "Received response from " << fromIp << ":" << ntohs(fromAddr.sin_port) << ", length: " << recvLen << " bytes" << endl;
 
         // 9. 解析并格式化响应数据
         string responseStr(recvBuf, recvLen);
@@ -275,16 +273,16 @@ int main() {
     // 服务器IP和端口（可直接修改）
     string SERVER_IP;
     int SERVER_PORT;
-    cout << "请输入IGI2服务器IP地址:";
+    cout << "Enter IGI2 Server IP: ";
     cin >> SERVER_IP;
-    cout << "请输入IGI2服务器端口:";
+    cout << "Enter IGI2 Server Port: ";
     cin >> SERVER_PORT;
     // 发送请求并获取结果
     string result = sendUdpStatusRequest(SERVER_IP, SERVER_PORT);
 
     // 打印最终结果
     cout << "\n==================================================" << endl;
-    cout << "解析后的服务器状态：" << endl;
+    cout << "Parsed Server Status:" << endl;
     cout << result;
     cout << "==================================================" << endl;
     system("pause");
